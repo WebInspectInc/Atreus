@@ -54,11 +54,7 @@ enum {
 };
 
 enum {
-  SKIP,
-  MACRO_HYPER,
-  MACRO_MEH,
-  TAB_LEFT,
-  TAB_RIGHT
+  SKIP
 };
 
 
@@ -119,41 +115,12 @@ KALEIDOSCOPE_INIT_PLUGINS(
   Qukeys
 );
 
-static void OneShotHyper(uint8_t keyState) {
-  handleKeyswitchEvent(OSM(LeftShift), UNKNOWN_KEYSWITCH_LOCATION, keyState);
-  handleKeyswitchEvent(OSM(LeftControl), UNKNOWN_KEYSWITCH_LOCATION, keyState);
-  handleKeyswitchEvent(OSM(LeftAlt), UNKNOWN_KEYSWITCH_LOCATION, keyState);
-  handleKeyswitchEvent(OSM(LeftGui), UNKNOWN_KEYSWITCH_LOCATION, keyState);
-}
-
-static void OneShotMeh(uint8_t keyState) {
-  handleKeyswitchEvent(OSM(LeftControl), UNKNOWN_KEYSWITCH_LOCATION, keyState);
-  handleKeyswitchEvent(OSM(LeftAlt), UNKNOWN_KEYSWITCH_LOCATION, keyState);
-  handleKeyswitchEvent(OSM(LeftGui), UNKNOWN_KEYSWITCH_LOCATION, keyState);
-}
-
 const macro_t *macroAction(uint8_t macroIndex, uint8_t keyState) {
   switch (macroIndex) {
   case QWERTY:
     Layer.move(LAYER_QWERTY);
     break;
 
-    case MACRO_HYPER:
-      OneShotHyper(keyState);
-      break;
-
-    case MACRO_MEH:
-      OneShotMeh(keyState);
-      break;
-
-    case TAB_LEFT:
-      return MACRODOWN(D(LeftGui), D(LeftShift), D(LeftBracket));
-      break;
-
-    case TAB_RIGHT:
-      return MACRODOWN(D(LeftGui), D(LeftShift), D(RightBracket));
-      break;
-    
   default:
     break;
   }
@@ -165,6 +132,7 @@ void setup() {
   Kaleidoscope.setup();
   SpaceCadet.disable();
   EEPROMKeymap.setup(10);
+  OneShot.disableStickabilityForModifiers();
 }
 
 void loop() {
